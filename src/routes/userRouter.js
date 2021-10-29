@@ -9,21 +9,17 @@ const userRepository = require('../repository/userRepository');
 routes.post('/register', (req, res) => {
   const { body } = req;
   userController.registerUser(body).then((response) => {
-    console.log('res 200');
     res.status(200).json({ response });
   }).catch((response) => {
-    console.log('res 400');
     res.status(400).json({ response });
   });
 });
 
 routes.post('/login', (req, res) => {
   const { body } = req;
-  userRepository.checkUser(body)
-    .then((userId) => {
-      res.status(200).json({ userId });
-    })
-    .catch((response) => {
+  userController.checkUserAndGetType(body).then(({userId, userType}) => {
+      res.status(200).json({ userId, userType });
+    }).catch((response) => {
       res.status(400).json({ response });
     });
 });

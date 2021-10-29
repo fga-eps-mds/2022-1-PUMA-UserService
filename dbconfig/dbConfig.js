@@ -1,10 +1,9 @@
-/* eslint-disable import/no-unresolved */
 require('dotenv').config();
+const { Pool } = require('pg');
+const environment = require('../src/config/environment');
 
-// eslint-disable-next-line no-unused-vars
-const { Pool, Client } = require('pg');
-
-const connectionString = process.env.DB_URL;
+environment.configEnv();
+const connectionString = global.DB_URL;
 
 const dbSchema = require('./dbSchema');
 
@@ -22,17 +21,17 @@ while (tries > 0) {
         console.log('Database not found');
         console.log('Creating');
 
-        // eslint-disable-next-line no-unused-vars
-        pool.query(dbSchema.DBSCHEMA, (error, resp) => {
+        pool.query(dbSchema.DBSCHEMA, (error) => {
           if (error) {
             console.log('Failed creating Database');
-            console.log(err);
+            console.log(error);
           } else {
             console.log('Database \x1b[32mOK\x1b[0m');
           }
         });
-      // eslint-disable-next-line no-throw-literal
-      } else if (res.rowCount !== 13) throw '\x1b[33mFaulty database in project\n\x1b[33mDelete dbdata and start project again';
+      } else if (res.rowCount !== dbSchema.DBSCHEMALEN) {
+        throw new Error('\x1b[33mFaulty database in project\n\x1b[33mDelete dbdata and start project again');
+      }
 
       else console.log('Database \x1b[32mOK\x1b[0m');
     });
