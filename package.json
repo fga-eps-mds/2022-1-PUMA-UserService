@@ -6,8 +6,16 @@
   "scripts": {
     "start-dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test-debug": "mocha './tests/*/*.test.js' --recursive",
-    "test": "nyc --reporter=cobertura --reporter=html mocha './tests/*/*.test.js' --recursive --reporter mocha-junit-reporter",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:comm": "jest --coverage test/comunidade/comunidade.controller.spec.ts",
+    "test:maps": "jest --coverage test/mapas/mapas.controller.spec.ts",
+    "test:media": "jest --coverage test/midia/midia.controller.spec.ts",
+    "test:users": "jest --coverage test/users/users.controller.spec.ts",
+    "test:firebase": "jest --coverage test/firebase/firebase.controller.spec.ts",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
     "lint": "./node_modules/.bin/eslint ."
   },
   "repository": {
@@ -36,6 +44,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
+    "jest": "^28.1.3",
     "mocha": "^9.1.2",
     "supertest": "^6.2.3"
   }

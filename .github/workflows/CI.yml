@@ -1,36 +1,35 @@
 name: CI
-
 on: [push, pull_request]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Copy repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
 
-    - name: Make env
-      run: |
-        touch .env
-        echo ENVIRONMENT=dev >> .env
-        echo DB_URL_TEST=postgres://pumaadmin:pumaadmin@dbtest:5432/puma >> .env
-        echo DB_USER=pumaadmin >> .env
-        echo DB_PASS=pumaadmin >> .env
-        echo DB=puma >> .env
-        cat .env
-    - name: Run Tests
-      run: sudo make test
+      - name: Install npm dependencies
+        run: npm ci
 
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Lint code
+        run: npm run lint
 
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.REPO_TOKEN }}
+      - name: Run Tests & Coverage
+        run: npm run test:cov
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
