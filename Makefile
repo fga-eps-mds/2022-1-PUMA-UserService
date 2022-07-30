@@ -9,6 +9,7 @@ test:
 	./tests/utils/db_script_test.sh drop && ./tests/utils/db_script_test.sh create && ./tests/utils/db_script_test.sh populate);\
 	echo "\033[96mRunning Tests...\033[0m" && \
 	sudo docker-compose -f test.docker-compose.yaml exec -T user-service-test npm run test);\
+	echo "\033[96mStopping docker...\033[0m" && \
 	sudo docker-compose -f test.docker-compose.yaml down
 
 test-debug:
