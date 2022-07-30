@@ -11,11 +11,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
 
+    - name: Make env
+      run: |
+        touch .env
+        echo ENVIRONMENT=dev >> .env
+        echo DB_URL_TEST=postgres://pumaadmin:pumaadmin@db-test:5432/puma >> .env
+        echo DB_USER=pumaadmin >> .env
+        echo DB_PASS=pumaadmin >> .env
+        echo DB=puma >> .env
+        cat .env
     - name: Run Tests
       run: sudo make test
 
