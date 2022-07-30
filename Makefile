@@ -3,7 +3,7 @@ include .env
 .PHONY: test
 
 test:
-	(sudo docker-compose -f test.docker-compose.yaml up --build -d && \
+	(sudo docker-compose -f -t test.docker-compose.yaml up --build -d && \
 	sudo chmod +x ./tests/utils/db_script_test.sh ./tests/utils/wait-for-it-test.sh && \
 	(./tests/utils/wait-for-it-test.sh dbtest:5432 -- true && \
 	echo "\033[92mInserting data to database... \033[0m" && \
