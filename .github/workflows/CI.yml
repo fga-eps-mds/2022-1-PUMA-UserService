@@ -37,3 +37,6 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stop
+        run: sudo docker-compose -f test.docker-compose.yaml down
