@@ -15,8 +15,15 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Install npm dependencies
-        run: npm ci
+      - name: Make env
+        run: |
+          touch .env
+          echo ENVIRONMENT=dev >> .env
+          echo DB_URL_TEST=postgres://pumaadmin:pumaadmin@db-test:5432/puma >> .env
+          echo DB_USER=pumaadmin >> .env
+          echo DB_PASS=pumaadmin >> .env
+          echo DB=puma >> .env
+          cat .env
 
       - name: Make test
         run: sudo make test
