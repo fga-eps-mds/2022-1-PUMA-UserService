@@ -16,11 +16,8 @@ jobs:
       with:
         node-version: 14.x
 
-    - name: Run npm install
-      run: npm install
-
     - name: Run Tests
-      run: npm test
+      run: sudo make test
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
