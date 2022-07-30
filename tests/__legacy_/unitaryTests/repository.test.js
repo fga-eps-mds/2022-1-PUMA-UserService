@@ -1,42 +1,38 @@
 const assert = require('assert');
 const bcrypt = require('bcrypt');
-const repository = require('../../src/repository/userRepository');
+const repository = require('../../../src/repository/userRepository');
 
 const constants = require('../utils/constants');
 
-const success = constants.success;
-const fail = constants.fail
+const { success } = constants;
+const { fail } = constants;
 
 describe('src/repository/userRepository.js -> addUser', () => {
-
   it('should create a user -> Professor', (done) => {
     repository.addUser(success.newUserProfessor, success.hash).then((response) => {
       assert.equal(typeof (response), 'number');
       done();
     }).catch((error) => {
       console.log(error);
-      done(new Error(error))
+      done(new Error(error));
     });
-
   });
 
   it('should not create a user', (done) => {
     repository.addUser({}, success.hash).then((response) => {
-      done(new Error(response))
+      done(new Error(response));
     }).catch((error) => {
       console.log(error);
       assert.equal(error, 'ERROR');
       done();
     });
   });
-
 });
-
 
 describe('src/repository/userRepository.js -> add user type()', () => {
   let id = 0;
   beforeEach((done) => {
-    const newUser = {name: `asd${id}`, email: `asd${id}@email.com`}
+    const newUser = { name: `asd${id}`, email: `asd${id}@email.com` };
     repository.addUser(newUser, success.hash).then((response) => {
       id = response;
       done();
@@ -101,17 +97,16 @@ describe('src/repository/userRepository.js -> add user type()', () => {
       done();
     });
   });
-
 });
 
 describe('src/repository/userRepository.js -> getUserType -> Professor', () => {
   let id = 4500;
   before((done) => {
-    repository.addUser({name: `erg${id}`, email: `evgb${id}@email.com`}, success.hash).then((response) => {
+    repository.addUser({ name: `erg${id}`, email: `evgb${id}@email.com` }, success.hash).then((response) => {
       id = response;
-      repository.addProfessor(id, {matricula: id}).then(() => {
+      repository.addProfessor(id, { matricula: id }).then(() => {
         done();
-      })
+      });
     });
   });
 
@@ -126,11 +121,11 @@ describe('src/repository/userRepository.js -> getUserType -> Professor', () => {
 describe('src/repository/userRepository.js -> getUserType -> Student', () => {
   let id = 5500;
   before((done) => {
-    repository.addUser({name: `erg${id}`, email: `evgb${id}@email.com`}, success.hash).then((response) => {
+    repository.addUser({ name: `erg${id}`, email: `evgb${id}@email.com` }, success.hash).then((response) => {
       id = response;
-      repository.addStudent(id, {matricula: id}).then(() => {
+      repository.addStudent(id, { matricula: id }).then(() => {
         done();
-      })
+      });
     });
   });
 
@@ -145,11 +140,11 @@ describe('src/repository/userRepository.js -> getUserType -> Student', () => {
 describe('src/repository/userRepository.js -> getUserType -> physicalAgent', () => {
   let id = 6500;
   before((done) => {
-    repository.addUser({name: `erg${id}`, email: `evgb${id}@email.com`}, success.hash).then((response) => {
+    repository.addUser({ name: `erg${id}`, email: `evgb${id}@email.com` }, success.hash).then((response) => {
       id = response;
-      repository.addPhysicalAgent(id, {...success.newUserPhysical, cpf: id}).then(() => {
+      repository.addPhysicalAgent(id, { ...success.newUserPhysical, cpf: id }).then(() => {
         done();
-      })
+      });
     });
   });
 
@@ -164,11 +159,11 @@ describe('src/repository/userRepository.js -> getUserType -> physicalAgent', () 
 describe('src/repository/userRepository.js -> getUserType -> juridicalAgent', () => {
   let id = 7500;
   before((done) => {
-    repository.addUser({name: `erg${id}`, email: `evgb${id}@email.com`}, success.hash).then((response) => {
+    repository.addUser({ name: `erg${id}`, email: `evgb${id}@email.com` }, success.hash).then((response) => {
       id = response;
-      repository.addJuridicalAgent(id, {...success.newUserJuridical, cnpj: id}).then(() => {
+      repository.addJuridicalAgent(id, { ...success.newUserJuridical, cnpj: id }).then(() => {
         done();
-      })
+      });
     });
   });
 
@@ -181,9 +176,9 @@ describe('src/repository/userRepository.js -> getUserType -> juridicalAgent', ()
 });
 
 describe('src/repository/userRepository.js -> getUserType -> Failure', () => {
-  let id = 234
+  let id = 234;
   before((done) => {
-    repository.addUser({name: `fail${id}`, email: `failure${id}@email.com`}, success.hash).then((response) => {
+    repository.addUser({ name: `fail${id}`, email: `failure${id}@email.com` }, success.hash).then((response) => {
       id = response;
       done();
     });
@@ -192,8 +187,9 @@ describe('src/repository/userRepository.js -> getUserType -> Failure', () => {
   it('should fail -> invalid id', (done) => {
     repository.getUserType({}).then((res) => {
       done(new Error(res));
-    }).catch((err) => {
-      done();
+    }).catch((error) => {
+      console.log(error);
+      done(new Error(error));
     });
   });
 
@@ -204,16 +200,13 @@ describe('src/repository/userRepository.js -> getUserType -> Failure', () => {
       done();
     });
   });
-
 });
 
 describe('src/repository/userRepository.js -> checkUser', () => {
-  let hash;
-
   before((done) => {
-      bcrypt.hash('password', 10, (error, hashzada) => {
-        repository.addUser({ name: 'hehe', email: 'login@test.com' }, hashzada);
-        done();
+    bcrypt.hash('password', 10, (error, hashzada) => {
+      repository.addUser({ name: 'hehe', email: 'login@test.com' }, hashzada);
+      done();
     });
   });
 
@@ -225,19 +218,18 @@ describe('src/repository/userRepository.js -> checkUser', () => {
   });
 
   it('should reject login -> email', (done) => {
-    repository.checkUser({email: 'blabla', password: 'password'}).then((response) => {
+    repository.checkUser({ email: 'blabla', password: 'password' }).then((response) => {
       done(new Error(response));
-    }).catch(()=>{
+    }).catch(() => {
       done();
-    })
+    });
   });
 
   it('should reject login -> password', (done) => {
-    repository.checkUser({email: 'login@test.com', password: 'wrongpassword'}).then((response) => {
+    repository.checkUser({ email: 'login@test.com', password: 'wrongpassword' }).then((response) => {
       done(new Error(response));
-    }).catch(()=>{
+    }).catch(() => {
       done();
-    })
+    });
   });
-
 });

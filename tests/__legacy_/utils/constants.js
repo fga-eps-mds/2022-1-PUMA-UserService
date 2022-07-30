@@ -17,12 +17,12 @@ module.exports = {
       cnpj: 56854641,
       cep: 6546546,
       companyName: 'foo bar',
-      socialReason: 'rensgans'
+      socialReason: 'rensgans',
     },
     newUserPhysical: {
       name: 'physical',
       email: 'physical@email.com',
-      cpf: 5346854648
+      cpf: 5346854648,
     },
   },
   fail: {
@@ -39,11 +39,11 @@ module.exports = {
       email: 'agent@email.com',
       cep: 6546546,
       companyName: 'foo bar',
-      socialReason: 'rensgans'
+      socialReason: 'rensgans',
     },
     newUserPhysical: {
       name: 'physical',
-      email: 'physical@email.com'
+      email: 'physical@email.com',
     },
   },
-}
+};
