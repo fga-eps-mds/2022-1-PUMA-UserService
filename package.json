@@ -13,7 +13,7 @@
     "test:media": "jest --coverage test/midia/midia.controller.spec.ts",
     "test:users": "jest --coverage test/users/users.controller.spec.ts",
     "test:firebase": "jest --coverage test/firebase/firebase.controller.spec.ts",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --coverage --detectOpenHandles",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "lint": "./node_modules/.bin/eslint .",
