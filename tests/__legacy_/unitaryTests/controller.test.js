@@ -1,25 +1,23 @@
 const assert = require('assert');
-const bcrypt = require('bcrypt');
-const controller = require('../../src/controller/userController');
+const controller = require('../../../src/controller/userController');
 
 const constants = require('../utils/constants');
 
-const success = constants.success;
-const fail = constants.fail
+const { success } = constants;
 
-describe('src/controller/userController.js -> registerUser', () =>{
+describe('src/controller/userController.js -> registerUser', () => {
   it('should register a user -> professor', (done) => {
-      controller.registerUser({
-        ...success.newUserProfessor,
-        password: 'password',
-        type: 'Professor',
-        email: 'controller@professor.com',
-        matricula: 541
-      }).then(() => {
-        done();
-      }).catch((err) => {
-        done(new Error(err));
-      });
+    controller.registerUser({
+      ...success.newUserProfessor,
+      password: 'password',
+      type: 'Professor',
+      email: 'controller@professor.com',
+      matricula: 541,
+    }).then(() => {
+      done();
+    }).catch((err) => {
+      done(new Error(err));
+    });
   });
 
   it('should register a user -> Juridical Agent', (done) => {
@@ -28,7 +26,7 @@ describe('src/controller/userController.js -> registerUser', () =>{
       password: 'password',
       type: 'Agente Externo',
       externalAgentType: 'Pessoa Juridica',
-      cnpj: 998728
+      cnpj: 998728,
     }).then(() => {
       done();
     });
@@ -40,7 +38,7 @@ describe('src/controller/userController.js -> registerUser', () =>{
       password: 'password',
       type: 'Agente Externo',
       externalAgentType: 'Pessoa Fisica',
-      cpf: 998728
+      cpf: 998728,
     }).then(() => {
       done();
     });
@@ -52,14 +50,14 @@ describe('src/controller/userController.js -> registerUser', () =>{
       password: 'password',
       type: 'Aluno',
       externalAgentType: 'Pessoa Fisica',
-      matricula: 998728
+      matricula: 998728,
     }).then(() => {
       done();
     });
   });
 
   it('should not register a user -> null obj', (done) => {
-    controller.registerUser({}).then((res)=>{
+    controller.registerUser({}).then((res) => {
       done(new Error(res));
     }).catch(() => {
       done();
@@ -72,8 +70,8 @@ describe('src/controller/userController.js -> registerUser', () =>{
       name: 'foo',
       password: 'password',
       type: 'Agente Externo',
-      externalAgentType: 'unknown'
-    }).then((res)=>{
+      externalAgentType: 'unknown',
+    }).then((res) => {
       done(new Error(res));
     }).catch(() => {
       done();
@@ -86,34 +84,31 @@ describe('src/controller/userController.js -> registerUser', () =>{
       name: 'foo',
       password: 'password',
       type: 'unknown',
-    }).then((res)=>{
+    }).then((res) => {
       done(new Error(res));
     }).catch(() => {
       done();
     });
   });
-
 });
 
 describe('src/controller/userController.js -> checkUserAndGetType', () => {
-
   before((done) => {
     controller.registerUser({
       ...success.newUserStudent,
       email: 'checkuser@student.com',
       password: 'password',
       type: 'Aluno',
-      matricula: 55555
-    }).then(()=>{
-      done();
-    })
-  });
-
-  it('should return id and type', (done) => {
-    controller.checkUserAndGetType({email: 'checkuser@student.com', password: 'password'}).then((res) => {
-      assert.equal(typeof (res), 'object');
+      matricula: 55555,
+    }).then(() => {
       done();
     });
   });
 
+  it('should return id and type', (done) => {
+    controller.checkUserAndGetType({ email: 'checkuser@student.com', password: 'password' }).then((res) => {
+      assert.equal(typeof (res), 'object');
+      done();
+    });
+  });
 });

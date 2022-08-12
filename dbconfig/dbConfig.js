@@ -16,8 +16,8 @@ if (process.env.ENVIRONMENT === 'hom') {
     ...settings,
     ssl: {
       rejectUnauthorized: false,
-    }
-  }
+    },
+  };
 }
 
 const pool = new Pool(settings);

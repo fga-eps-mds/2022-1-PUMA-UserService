@@ -67,81 +67,64 @@ module.exports = {
         reject(response);
       });
   }),
-
-  checkUser: (loginUser) =>
-    // eslint-disable-next-line no-async-promise-executor
-    new Promise(async (resolve, reject) => {
-      try {
-        const response = await db.query('SELECT * FROM COMMON_USER WHERE email = $1', [loginUser.email]);
-        const user = response.rows[0];
-        if (await bcrypt.compare(loginUser.password, user.passwordhash)) {
-          resolve(user.userid);
-        } else {
-          reject(null);
-        }
-      } catch (e) {
-        reject(e);
-      }
-    }),
+  // eslint-disable-next-line no-async-promise-executor
+  checkUser: (loginUser) => new Promise(async (resolve, reject) => {
+    const response = await db.query('SELECT * FROM COMMON_USER WHERE email = $1', [loginUser.email]);
+    const user = response.rows[0];
+    if (await bcrypt.compare(loginUser.password, user.passwordhash)) {
+      resolve(user.userid);
+    } else {
+      reject(new Error('An error ocurred'));
+    }
+  }),
 
   getUserData: async (userId) => {
-    try {
-      let type = null;
+    let type = null;
 
-      const userData = await db.query('SELECT * FROM COMMON_USER WHERE userId = $1', [userId]);
+    const userData = await db.query('SELECT * FROM COMMON_USER WHERE userId = $1', [userId]);
 
-      const professorResult = await db.query('SELECT * FROM PROFESSOR WHERE userId = $1', [userId]);
-      if (professorResult.rows[0]) {
-        type = 'Professor';
-      }
-
-      const studentResult = await db.query('SELECT * FROM STUDENT WHERE userId = $1', [userId]);
-      if (studentResult.rows[0]) {
-        type = 'Aluno';
-      }
-
-      const physicalAgentResult = await db.query('SELECT * FROM PHYSICAL_AGENT WHERE userId = $1', [userId]);
-      if (physicalAgentResult.rows[0]) {
-        type = 'Agente Externo';
-      }
-
-      const juridicalAgentResult = await db.query('SELECT * FROM JURIDICAL_AGENT WHERE userId = $1', [userId]);
-      if (juridicalAgentResult.rows[0]) {
-        type = 'Agente Externo';
-      }
-
-      return {
-        userId: userData.rows[0].userid,
-        fullName: userData.rows[0].fullname,
-        email: userData.rows[0].email,
-        isAdmin: userData.rows[0].isadmin,
-        type,
-      };
-    } catch (e) {
-      throw (e);
+    const professorResult = await db.query('SELECT * FROM PROFESSOR WHERE userId = $1', [userId]);
+    if (professorResult.rows[0]) {
+      type = 'Professor';
     }
-    throw (new Error('User not found'));
+
+    const studentResult = await db.query('SELECT * FROM STUDENT WHERE userId = $1', [userId]);
+    if (studentResult.rows[0]) {
+      type = 'Aluno';
+    }
+
+    const physicalAgentResult = await db.query('SELECT * FROM PHYSICAL_AGENT WHERE userId = $1', [userId]);
+    if (physicalAgentResult.rows[0]) {
+      type = 'Agente Externo';
+    }
+
+    const juridicalAgentResult = await db.query('SELECT * FROM JURIDICAL_AGENT WHERE userId = $1', [userId]);
+    if (juridicalAgentResult.rows[0]) {
+      type = 'Agente Externo';
+    }
+
+    return {
+      userId: userData.rows[0].userid,
+      fullName: userData.rows[0].fullname,
+      email: userData.rows[0].email,
+      isAdmin: userData.rows[0].isadmin,
+      type,
+    };
   },
 
-  updateUserPassword: async (email, hash) => {
-    try {
-      return new Promise((resolve, reject) => {
-        db.query(
-          'UPDATE COMMON_USER SET passwordHash = $1 WHERE email = $2 RETURNING *;',
-          [hash, email],
-        )
-          .then((response) => {
-            console.log(response);
-            resolve(response.rows[0]);
-          })
-          .catch((response) => {
-            reject(response);
-          });
+  updateUserPassword: async (email, hash) => new Promise((resolve, reject) => {
+    db.query(
+      'UPDATE COMMON_USER SET passwordHash = $1 WHERE email = $2 RETURNING *;',
+      [hash, email],
+    )
+      .then((response) => {
+        console.log(response);
+        resolve(response.rows[0]);
+      })
+      .catch((response) => {
+        reject(response);
       });
-    } catch (e) {
-      reject(e);
-    }
-  },
+  }),
 
   checkUserByEmail: (email) => new Promise((resolve, reject) => {
     try {
